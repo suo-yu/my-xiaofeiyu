@@ -19,11 +19,55 @@ import { SurfCoreClient } from './surfcore';
 
 export type { BubblePayload } from '../shared/chat';
 
+/** 动作白名单：与 renderer 的 rig.playCommand / main.ts 的 MENU_ACTIONS 同名。 */
+const PET_ACTIONS = ['hop', 'poke', 'blink', 'pat', 'wag', 'tailpet'] as const;
+type PetAction = (typeof PET_ACTIONS)[number];
+
+/**
+ * 关键词兜底：SurfCore 没带 action 时，按这句话的语气猜一个。
+ * 规则很土但稳定可预期；真按语义挑动作由 SurfCore 那边让模型给 action 更准。
+ */
+const AUTO_ACTION_RULES: Array<{ name: PetAction; re: RegExp }> = [
+  { name: 'hop', re: /(哈哈|嘿嘿|好耶|太棒|太好了|开心|兴奋|喜欢|！{2,})/ },
+  { name: 'poke', re: /(哼|才不|讨厌|不理你|坏蛋|烦人|生气|过分|可恶)/ },
+  { name: 'blink', re: /(害羞|脸红|不好意思|别这样|不要嘛|呜+|呜呜|扭捏)/ },
+  { name: 'pat', re: /(摸摸|摸头|抱抱|贴贴|轻轻|乖|安慰|陪你)/ },
+  { name: 'wag', re: /(尾巴|摇摇|甩尾|俏皮|得意)/ },
+  { name: 'tailpet', re: /(恶作剧|逗你|骗你|才不上当)/ },
+];
+let lastAutoAction = '';
+
+function pickAutoAction(text: string): PetAction | '' {
+  const t = String(text || '');
+  if (!t.trim()) return '';
+  let pick: PetAction | '' = '';
+  for (const rule of AUTO_ACTION_RULES) if (rule.re.test(t)) { pick = rule.name; break; }
+  if (!pick) {
+    if (/[？！]{1,}$/.test(t.trim())) pick = 'blink';
+    else if (/！{1,}$/.test(t.trim())) pick = 'hop';
+    else if (t.length <= 12) pick = 'blink';
+  }
+  if (!pick) return '';
+  // 同一个动作不连着重复，换一个相近的，避免看起来像卡住了。
+  if (pick === lastAutoAction) {
+    const alt: Record<string, PetAction> = { hop: 'wag', poke: 'blink', blink: 'hop', pat: 'wag', wag: 'hop', tailpet: 'poke' };
+    pick = alt[pick] ?? pick;
+  }
+  lastAutoAction = pick;
+  return pick;
+}
+
+function isPetAction(value: unknown): value is PetAction {
+  return typeof value === 'string' && (PET_ACTIONS as readonly string[]).includes(value);
+}
+
 export interface ChatHostDeps {
   distDir: string;
   preload: string;
   getPetWindow: () => BrowserWindow | null;
   onSpeak: (durationMs: number) => void;
+  /** 播放一个动作（pet:command）：hop / poke / blink / pat / wag / tailpet。 */
+  onAction?: (cmd: string) => void;
   onModeChange: (mode: 'text' | 'voice') => void;
   onFocusChange?: (enabled: boolean) => void;
   log: (...args: unknown[]) => void;
@@ -363,6 +407,7 @@ export class ChatHost {
       at: Number(event.at) || nowMs(),
       proactive: true,
       audio: event.audio,
+      action: event.action,
     }));
     this.broadcastDialog('chat:message', message);
     this.showBubble(message);
@@ -443,6 +488,9 @@ export class ChatHost {
       ? payload.audio.durationMs + 600
       : Math.min(15000, Math.max(3000, 700 + payload.text.length * 130));
     this.deps.onSpeak(speechMs);
+    // 动作：宿主（SurfCore）指定的优先，其次按文本猜；长句猜不出来就不动。
+    const action = isPetAction(message.action) ? message.action : pickAutoAction(message.text);
+    if (action) this.deps.onAction?.(action);
     if (this.bubbleVisible) {
       // 新的一句直接顶掉旧的：最新一句最要紧。
       // （鼠标悬停只暂停「自动隐藏」，不能把后面的消息一直堵在队列里。）

@@ -14,6 +14,8 @@ export interface ChatMessage {
   modality: 'text' | 'voice';
   at: number;
   proactive?: boolean;
+  /** SurfCore 按语气挑的桌宠动作（hop/poke/blink/pat/wag/tailpet），没有就让它自己按文本猜。 */
+  action?: string;
   audio?: ChatAudio;
 }
 
@@ -34,6 +36,8 @@ export interface SurfCoreEvent {
   messageId?: string;
   audio?: ChatAudio;
   enabled?: boolean;
+  /** 同 ChatMessage.action：宿主可以指定这一句配哪个动作。 */
+  action?: string;
 }
 
 export interface ChatReply {
