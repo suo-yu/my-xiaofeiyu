@@ -512,6 +512,69 @@ function send(cmd: string) {
   win?.webContents.send('pet:command', cmd);
 }
 
+/* ------------------------------- 开机自启 ------------------------------- */
+//
+// 2026-11-14 加：开关放进桌宠自己的菜单，不再另开一个桌面快捷方式。
+// 开机跑的是 `pet/start-pet.vbs`（会顺手拉起无窗口的 SurfCore 后端），
+// 所以这里写入的启动项指向 wscript.exe + 那个 vbs，而不是 electron 本体。
+
+function petStartScript(): string {
+  return path.join(appRoot(), '..', 'start-pet.vbs');
+}
+
+function petAutoStartSpec(): { path: string; args: string[] } {
+  return {
+    path: path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'wscript.exe'),
+    args: [`"${petStartScript()}"`],
+  };
+}
+
+/** 老的实现是在「启动」文件夹放快捷方式；这里读它、并在第一次切换时清掉，避免开机开两次。 */
+function petStartupLnk(): string {
+  try {
+    return path.join(app.getPath('appData'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup', '桌宠.lnk');
+  } catch {
+    return '';
+  }
+}
+
+function petAutostartOn(): boolean {
+  const lnk = petStartupLnk();
+  try {
+    if (lnk && fs.existsSync(lnk)) return true;
+  } catch {}
+  try {
+    return app.getLoginItemSettings(petAutoStartSpec()).openAtLogin === true;
+  } catch {
+    return false;
+  }
+}
+
+function petSetAutostart(on: boolean): void {
+  try {
+    const lnk = petStartupLnk();
+    if (lnk && fs.existsSync(lnk)) fs.rmSync(lnk, { force: true });
+  } catch {}
+  try {
+    app.setLoginItemSettings({ ...petAutoStartSpec(), openAtLogin: on });
+    console.log('[autostart]', on ? 'on' : 'off');
+  } catch (err) {
+    console.warn('[autostart] 设置失败:', (err as Error)?.message ?? err);
+  }
+}
+
+function autostartMenuItem(): MenuItemConstructorOptions {
+  return {
+    label: '开机自启',
+    type: 'checkbox',
+    checked: petAutostartOn(),
+    click: (item) => {
+      petSetAutostart(Boolean(item.checked));
+      try { refreshTrayMenu(); } catch {}
+    },
+  };
+}
+
 /**
  * 进入「持续说话」状态：期间嘴一直按音节开合，直到时长走完。
  * 文本消息按字数估时长，语音按音频时长（chat-host 算好传进来）；
@@ -624,6 +687,7 @@ function showContextMenu(): Menu | null {
   const template: MenuItemConstructorOptions[] = [
     ...chatMenuItems(),
     focusMenuItem(),
+    autostartMenuItem(),
     { type: 'separator' },
     buildSkinSubmenu(),
     { type: 'separator' },
@@ -647,6 +711,7 @@ function trayTemplate(): MenuItemConstructorOptions[] {
   return [
     ...chatMenuItems(),
     focusMenuItem(),
+    autostartMenuItem(),
     { type: 'separator' },
     buildSkinSubmenu(),
     { type: 'separator' },
@@ -1048,6 +1113,7 @@ app.whenReady().then(() => {
     preload: path.join(__dirname, 'preload.js'),
     getPetWindow: () => win,
     onSpeak: (ms) => speakFor(ms),
+    onAction: (cmd) => send(cmd),
     onModeChange: (mode) => {
       settings.dialogMode = mode;
       persistSettings();
