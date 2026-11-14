@@ -1,0 +1,255 @@
+{
+  "schema": 2,
+  "id": "feiyu-03",
+  "name": "今天Q弹一点",
+  "author": "you",
+  "version": "0.1.0",
+  "rig": "layered",
+  "canvas": {
+    "w": 1280,
+    "h": 1280
+  },
+  "display": {
+    "scale": 0.32
+  },
+  "hitbox": {
+    "x": 99,
+    "y": 261,
+    "w": 1149,
+    "h": 762
+  },
+  "persona": {
+    "name": "今天Q弹一点",
+    "prompt": "persona.md"
+  },
+  "rigOptions": {
+    "headPivot": [
+      660,
+      700
+    ],
+    "backHairPivot": [
+      600,
+      620
+    ],
+    "mouthPivot": [
+      646,
+      628
+    ],
+    "gazeCenter": [
+      646,
+      566
+    ],
+    "eyeCenters": {
+      "l": [
+        731,
+        577
+      ],
+      "r": [
+        553,
+        599
+      ]
+    },
+    "motion": {
+      "breath": 0.011,
+      "sway": 0.008,
+      "headTurn": 6,
+      "gazeMax": [
+        4,
+        3
+      ]
+    },
+    "tailPivot": [
+      770,
+      790
+    ],
+    "tailAmp": 0.14,
+    "blinkLash": {
+      "l": [
+        -6,
+        24
+      ],
+      "r": [
+        9,
+        24
+      ]
+    },
+    "headTilt": 0.006,
+    "jelly": true,
+    "mouth": {
+      "rest": "closed",
+      "open": "art/10_mouth_open.png",
+      "openPivot": [
+        646,
+        648
+      ],
+      "openRotation": -5,
+      "openCover": "art/10_mouth_open_cover.png"
+    }
+  },
+  "interaction": {
+    "cursor": "pointer",
+    "hoverCloseEyes": false,
+    "regions": [
+      {
+        "id": "head",
+        "gesture": "pat",
+        "cursor": "pointer",
+        "hoverCloseEyes": true,
+        "shape": {
+          "type": "ellipse",
+          "cx": 650,
+          "cy": 520,
+          "rx": 260,
+          "ry": 230
+        }
+      },
+      {
+        "id": "tail",
+        "gesture": "tailpet",
+        "cursor": "pointer",
+        "hoverCloseEyes": false,
+        "shape": {
+          "type": "rect",
+          "x": 720,
+          "y": 721,
+          "w": 528,
+          "h": 302
+        }
+      },
+      {
+        "id": "body",
+        "gesture": "poke",
+        "cursor": "pointer",
+        "shape": {
+          "type": "rect",
+          "x": 330,
+          "y": 700,
+          "w": 620,
+          "h": 323
+        }
+      }
+    ],
+    "menu": [
+      "resize",
+      "recenter",
+      "hide",
+      "quit"
+    ]
+  },
+  "layers": [
+    {
+      "id": "hair.back",
+      "file": "art/02_back_hair.png",
+      "group": "body",
+      "role": "hair.back"
+    },
+    {
+      "id": "tail",
+      "file": "art/03_tail.png",
+      "group": "body",
+      "role": "tail"
+    },
+    {
+      "id": "topwear",
+      "file": "art/04_topwear.png",
+      "group": "body",
+      "role": "topwear"
+    },
+    {
+      "id": "neck",
+      "file": "art/05_neck.png",
+      "group": "body",
+      "role": "neck"
+    },
+    {
+      "id": "arm.l",
+      "file": "art/06_handwear-l.png",
+      "group": "body",
+      "role": "arm.l"
+    },
+    {
+      "id": "arm.r",
+      "file": "art/07_handwear-r.png",
+      "group": "body",
+      "role": "arm.r"
+    },
+    {
+      "id": "headwear",
+      "file": "art/08_headwear.png",
+      "group": "head",
+      "role": "headwear"
+    },
+    {
+      "id": "face",
+      "file": "art/09_face.png",
+      "group": "head",
+      "role": "face"
+    },
+    {
+      "id": "mouth",
+      "file": "art/10_mouth.png",
+      "group": "head",
+      "role": "mouth"
+    },
+    {
+      "id": "eye.white.l",
+      "file": "art/11_eyewhite-l.png",
+      "group": "head",
+      "role": "eye.white.l"
+    },
+    {
+      "id": "eye.white.r",
+      "file": "art/12_eyewhite-r.png",
+      "group": "head",
+      "role": "eye.white.r"
+    },
+    {
+      "id": "eye.iris.l",
+      "file": "art/13_irides-l.png",
+      "group": "head",
+      "role": "eye.iris.l"
+    },
+    {
+      "id": "eye.iris.r",
+      "file": "art/14_irides-r.png",
+      "group": "head",
+      "role": "eye.iris.r"
+    },
+    {
+      "id": "eye.lash.l",
+      "file": "art/15_eyelash-l.png",
+      "group": "head",
+      "role": "eye.lash.l"
+    },
+    {
+      "id": "eye.lash.r",
+      "file": "art/16_eyelash-r.png",
+      "group": "head",
+      "role": "eye.lash.r"
+    },
+    {
+      "id": "brow.l",
+      "file": "art/17_eyebrow-l.png",
+      "group": "head",
+      "role": "brow.l"
+    },
+    {
+      "id": "brow.r",
+      "file": "art/18_eyebrow-r.png",
+      "group": "head",
+      "role": "brow.r"
+    },
+    {
+      "id": "hair.front",
+      "file": "art/19_front_hair.png",
+      "group": "head",
+      "role": "hair.front"
+    },
+    {
+      "id": "headwear.frill",
+      "file": "art/20_headwear-frill.png",
+      "group": "head",
+      "role": "headwear.frill"
+    }
+  ]
+}

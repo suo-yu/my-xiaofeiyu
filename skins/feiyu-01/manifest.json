@@ -1,0 +1,240 @@
+{
+  "schema": 2,
+  "id": "feiyu-01",
+  "name": "今天元气一点",
+  "author": "you",
+  "version": "0.2.0",
+  "rig": "layered",
+  "canvas": {
+    "w": 1024,
+    "h": 1024
+  },
+  "display": {
+    "scale": 0.44
+  },
+  "hitbox": {
+    "x": 205,
+    "y": 95,
+    "w": 630,
+    "h": 929
+  },
+  "persona": {
+    "name": "小肥鱼",
+    "prompt": "persona.md"
+  },
+  "rigOptions": {
+    "headPivot": [
+      556,
+      512
+    ],
+    "backHairPivot": [
+      512,
+      320
+    ],
+    "mouthPivot": [
+      579,
+      442
+    ],
+    "gazeCenter": [
+      586,
+      392
+    ],
+    "eyeCenters": {
+      "l": [
+        648,
+        411
+      ],
+      "r": [
+        524,
+        374
+      ]
+    },
+    "motion": {
+      "breath": 0.011,
+      "sway": 0.008,
+      "headTurn": 10,
+      "gazeMax": [
+        6,
+        4.5
+      ]
+    },
+    "blinkLash": {
+      "l": [
+        0,
+        10
+      ],
+      "r": [
+        0,
+        12
+      ]
+    },
+    "mouth": {
+      "rest": "closed",
+      "open": "art/11_mouth_open.png",
+      "openPivot": [
+        579,
+        467
+      ],
+      "openOffset": [
+        -3,
+        -4
+      ],
+      "openRotation": 15,
+      "hideBase": true
+    }
+  },
+  "interaction": {
+    "cursor": "pointer",
+    "regions": [
+      {
+        "id": "head",
+        "gesture": "pat",
+        "cursor": "pointer",
+        "shape": {
+          "type": "ellipse",
+          "cx": 596,
+          "cy": 320,
+          "rx": 200,
+          "ry": 200
+        },
+        "hoverCloseEyes": true
+      },
+      {
+        "id": "body",
+        "gesture": "poke",
+        "cursor": "pointer",
+        "shape": {
+          "type": "rect",
+          "x": 240,
+          "y": 480,
+          "w": 560,
+          "h": 544
+        }
+      }
+    ],
+    "menu": [
+      "resize",
+      "separator",
+      "recenter",
+      "hide",
+      "quit"
+    ],
+    "hoverCloseEyes": false
+  },
+  "layers": [
+    {
+      "id": "hair.back",
+      "file": "art/02_back_hair.png",
+      "group": "body",
+      "role": "hair.back"
+    },
+    {
+      "id": "bottomwear",
+      "file": "art/03_bottomwear.png",
+      "group": "body",
+      "role": "bottomwear"
+    },
+    {
+      "id": "topwear",
+      "file": "art/04_topwear.png",
+      "group": "body",
+      "role": "topwear"
+    },
+    {
+      "id": "neck",
+      "file": "art/05_neck.png",
+      "group": "body",
+      "role": "neck"
+    },
+    {
+      "id": "arm.l",
+      "file": "art/06_handwear-l.png",
+      "group": "body",
+      "role": "arm.l"
+    },
+    {
+      "id": "arm.r",
+      "file": "art/07_handwear-r.png",
+      "group": "body",
+      "role": "arm.r"
+    },
+    {
+      "id": "headwear",
+      "file": "art/08_headwear.png",
+      "group": "head",
+      "role": "headwear"
+    },
+    {
+      "id": "face",
+      "file": "art/09_face.png",
+      "group": "head",
+      "role": "face"
+    },
+    {
+      "id": "nose",
+      "file": "art/10_nose.png",
+      "group": "head",
+      "role": "nose"
+    },
+    {
+      "id": "mouth",
+      "file": "art/11_mouth.png",
+      "group": "head",
+      "role": "mouth"
+    },
+    {
+      "id": "eye.white.l",
+      "file": "art/12_eyewhite-l.png",
+      "group": "head",
+      "role": "eye.white.l"
+    },
+    {
+      "id": "eye.white.r",
+      "file": "art/13_eyewhite-r.png",
+      "group": "head",
+      "role": "eye.white.r"
+    },
+    {
+      "id": "eye.iris.l",
+      "file": "art/14_irides-l.png",
+      "group": "head",
+      "role": "eye.iris.l"
+    },
+    {
+      "id": "eye.iris.r",
+      "file": "art/15_irides-r.png",
+      "group": "head",
+      "role": "eye.iris.r"
+    },
+    {
+      "id": "eye.lash.l",
+      "file": "art/16_eyelash-l.png",
+      "group": "head",
+      "role": "eye.lash.l"
+    },
+    {
+      "id": "eye.lash.r",
+      "file": "art/17_eyelash-r.png",
+      "group": "head",
+      "role": "eye.lash.r"
+    },
+    {
+      "id": "brow.l",
+      "file": "art/18_eyebrow-l.png",
+      "group": "head",
+      "role": "brow.l"
+    },
+    {
+      "id": "brow.r",
+      "file": "art/19_eyebrow-r.png",
+      "group": "head",
+      "role": "brow.r"
+    },
+    {
+      "id": "hair.front",
+      "file": "art/20_front_hair.png",
+      "group": "head",
+      "role": "hair.front"
+    }
+  ]
+}
